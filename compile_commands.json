@@ -1,0 +1,27 @@
+[
+{
+  "directory": "/home/pg999w/Projects/MyCompiler/test/cmake-build-debug",
+  "command": "/bin/c++   -I/home/pg999w/Projects/MyCompiler/test/cmake-build-debug -I/home/pg999w/Projects/MyCompiler/test/.  -g   -std=gnu++11 -o CMakeFiles/lang.dir/ast.cpp.o -c /home/pg999w/Projects/MyCompiler/test/ast.cpp",
+  "file": "/home/pg999w/Projects/MyCompiler/test/ast.cpp"
+},
+{
+  "directory": "/home/pg999w/Projects/MyCompiler/test/cmake-build-debug",
+  "command": "/bin/c++   -I/home/pg999w/Projects/MyCompiler/test/cmake-build-debug -I/home/pg999w/Projects/MyCompiler/test/.  -g   -std=gnu++11 -o CMakeFiles/lang.dir/lang.tab.cpp.o -c /home/pg999w/Projects/MyCompiler/test/cmake-build-debug/lang.tab.cpp",
+  "file": "/home/pg999w/Projects/MyCompiler/test/cmake-build-debug/lang.tab.cpp"
+},
+{
+  "directory": "/home/pg999w/Projects/MyCompiler/test/cmake-build-debug",
+  "command": "/bin/c++   -I/home/pg999w/Projects/MyCompiler/test/cmake-build-debug -I/home/pg999w/Projects/MyCompiler/test/.  -g   -std=gnu++11 -o CMakeFiles/lang.dir/lang.yy.cpp.o -c /home/pg999w/Projects/MyCompiler/test/cmake-build-debug/lang.yy.cpp",
+  "file": "/home/pg999w/Projects/MyCompiler/test/cmake-build-debug/lang.yy.cpp"
+},
+{
+  "directory": "/home/pg999w/Projects/MyCompiler/test/cmake-build-debug",
+  "command": "/bin/c++   -I/home/pg999w/Projects/MyCompiler/test/cmake-build-debug -I/home/pg999w/Projects/MyCompiler/test/.  -g   -std=gnu++11 -o CMakeFiles/lang.dir/intern.cpp.o -c /home/pg999w/Projects/MyCompiler/test/intern.cpp",
+  "file": "/home/pg999w/Projects/MyCompiler/test/intern.cpp"
+},
+{
+  "directory": "/home/pg999w/Projects/MyCompiler/test/cmake-build-debug",
+  "command": "/bin/c++   -I/home/pg999w/Projects/MyCompiler/test/cmake-build-debug -I/home/pg999w/Projects/MyCompiler/test/.  -g   -std=gnu++11 -o CMakeFiles/lang.dir/parse.cpp.o -c /home/pg999w/Projects/MyCompiler/test/parse.cpp",
+  "file": "/home/pg999w/Projects/MyCompiler/test/parse.cpp"
+}
+]
