@@ -45,7 +45,7 @@ double env_scope::get_val(const symbol &s)
     auto it = values.find(s);
     if (it == values.end()) {
         if (upper_env == nullptr) {
-            yyerror("error: variable not initialized: %s",
+            yyerror("variable not initialized: %s",
                     s.get_string().c_str());
         } else {
             return upper_env->get_val(s);
@@ -60,3 +60,4 @@ double assign_node::eval(env_scope &env)
     env.values[name] = ret;
     return ret;
 }
+

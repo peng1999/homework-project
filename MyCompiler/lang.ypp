@@ -29,12 +29,12 @@ extern int yylex();
 
 %%
 calclist:
-        | calclist exp EOL {
-            printf("= %g\n", $2->eval(env));
-            delete $2;
-            prompt();
-        }
-        | calclist EOL { prompt(); }
+        | calclist exp EOL      { printf("= %g\n", $2->eval(env));
+                                  delete $2;
+                                  prompt();
+                                }
+        | calclist EOL          { prompt(); }
+        | calclist error EOL    { yyerrok; prompt(); }
         ;
 
 exp: IDENT '=' exp              { $$ = new assign_node(*$1, $3); delete $1; }

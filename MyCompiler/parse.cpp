@@ -7,7 +7,7 @@ void yyerror(const char *s, ...) {
     va_list ap;
     va_start(ap, s);
 
-    std::cerr << yylineno << ": error: ";
+    std::cerr << yylineno - 1 << ": error: ";
     vfprintf(stderr, s, ap);
     std::cerr << std::endl;
 }
@@ -21,4 +21,5 @@ int main() {
 
 void prompt() {
     // TODO: check if interactive
+    std::cout << yylineno << "> ";
 }
