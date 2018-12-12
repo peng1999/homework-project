@@ -3,23 +3,26 @@
 #include <memory>
 #include <map>
 #include <string>
+#include <vector>
 #include "intern.h"
+#include "object.h"
 
 
 using std::vector;
 using std::unique_ptr;
 using std::string;
+using std::vector;
 
 enum class op_type { PLUS, MINUS, MUL, DIV, ABS, UMINUS, };
 
 struct env_scope {
-    std::map<symbol, double> values;
+    std::map<symbol, object> values;
     unique_ptr<env_scope> subenv;
     env_scope* upper_env;
 
     env_scope& spawn();
 
-    double get_val(const symbol& s);
+    object get_val(const symbol &s);
 };
 
 // Global env scope
@@ -27,7 +30,7 @@ extern env_scope env;
 
 class ast_node {
 public:
-    virtual double eval(env_scope &env) = 0;
+    virtual object eval(env_scope &env) = 0;
     virtual ~ast_node() = default;
 };
 
@@ -37,22 +40,26 @@ public:
 class op_node: public ast_node {
 public:
     op_type type;
-    unique_ptr<ast_node> l;
-    unique_ptr<ast_node> r;
 
-    double eval(env_scope &env) override;
+    vector<unique_ptr<ast_node>> args;
+
+    object eval(env_scope &env) override;
 
     ~op_node() override = default;
     
-    op_node(op_type t, ast_node* _l, ast_node* _r)
-        : type(t), l(_l), r(_r) {}
+    op_node(op_type t, ast_node* _l, ast_node* _r) : type(t) {
+        args.emplace_back(_l);
+        args.emplace_back(_r);
+    }
+
+    op_node(op_type t, ast_node* a) : type(t) { args.emplace_back(a); }
 };
 
 class num_node: public ast_node {
 public:
     double number;
 
-    double eval(env_scope &env) override { return number; }
+    object eval(env_scope &env) override { return object::make_num(number); }
 
     explicit num_node(double n): number(n) {}
 };
@@ -63,7 +70,7 @@ public:
 
     explicit var_node(const string& n): name(n) { }
 
-    double eval(env_scope &env) override { return env.get_val(name); }
+    object eval(env_scope &env) override { return env.get_val(name); }
 };
 
 class assign_node: public ast_node {
@@ -73,5 +80,5 @@ public:
 
     assign_node(const string& n, ast_node* v): name(n), value(v) { }
 
-    double eval(env_scope &env) override;
+    object eval(env_scope &env) override;
 };

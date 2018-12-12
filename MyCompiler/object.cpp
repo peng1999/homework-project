@@ -14,6 +14,9 @@ object object::operate(const op_fun &op_type, const vector<object> &args) {
         if (const double *pv = std::get_if<double>(&arg.val)) {
             dargs.push_back(*pv);
         } else {
+            if (auto pe = std::get_if<error_obj>(&arg.val)) {
+                return object(*pe);
+            }
             return make_err(utility::NUM_ERROR);
         }
     }
@@ -27,4 +30,22 @@ object object::make_err(const std::string &m) {
 
 object object::make_num(double v) {
     return object(std::variant<double, error_obj>(v));
+}
+
+bool object::is_err() const {
+    return std::holds_alternative<error_obj>(val);
+}
+
+bool object::is_num() const {
+    return std::holds_alternative<double>(val);
+}
+
+std::ostream &operator<<(std::ostream &out, error_obj o) {
+    return out << "error: " << o.message;
+}
+
+std::ostream &operator<<(std::ostream &out, object o) {
+    std::visit([&](auto && obj) { out << obj; },
+               o.val);
+    return out;
 }

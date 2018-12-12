@@ -5,6 +5,7 @@
 
 %{
 #include <cstdio>
+#include <iostream>
 extern int yylex();
 %}
 
@@ -29,7 +30,10 @@ extern int yylex();
 
 %%
 calclist:
-        | calclist exp EOL      { printf("= %g\n", $2->eval(env));
+        | calclist exp EOL      { auto result = $2->eval(env);
+                                  if (result.is_num())
+                                      std::cout << "= ";
+                                  std::cout << result << std::endl;
                                   delete $2;
                                   prompt();
                                 }
@@ -42,9 +46,9 @@ exp: IDENT '=' exp              { $$ = new assign_node(*$1, $3); delete $1; }
    | exp '-' exp                { $$ = new op_node(op_type::MINUS, $1, $3); }
    | exp '*' exp                { $$ = new op_node(op_type::MUL, $1, $3); }
    | exp '/' exp                { $$ = new op_node(op_type::DIV, $1, $3); }
-   | '|' exp '|'                { $$ = new op_node(op_type::ABS, $2, nullptr); }
+   | '|' exp '|'                { $$ = new op_node(op_type::ABS, $2); }
    | '(' exp ')'                { $$ = $2; }
-   | '-' exp %prec UMINUS       { $$ = new op_node(op_type::UMINUS, $2, nullptr); }
+   | '-' exp %prec UMINUS       { $$ = new op_node(op_type::UMINUS, $2); }
    | NUMBER                     { $$ = new num_node($1); }
    | IDENT                      { $$ = new var_node(*$1); delete $1; }
    ;

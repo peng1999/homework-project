@@ -26,17 +26,15 @@ public:
 
     explicit object(variant_t v): val(std::move(v)) { }
 
+    bool is_num() const;
+
+    bool is_err() const;
+
     static object make_err(const std::string& m);
     static object make_num(double v);
     static object operate( const op_fun &op_type, const vector<object> &args);
 };
 
-std::ostream& operator<< (std::ostream &out, error_obj &o) {
-    return out << o.message;
-}
+std::ostream& operator<<(std::ostream &out, error_obj o);
 
-std::ostream& operator<< (std::ostream &out, object &o) {
-    std::visit([&](auto && obj) { out << obj; },
-               o.val);
-    return out;
-}
+std::ostream& operator<<(std::ostream &out, object o);
