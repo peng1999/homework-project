@@ -15,8 +15,8 @@ add_executable(lang
         ast.cpp ast.h
         ${BISON_Parser_OUTPUTS}
         ${FLEX_Scanner_OUTPUTS}
-        intern.cpp intern.h parse.cpp parse.h)
+        intern.cpp intern.h parse.cpp parse.h object.cpp object.h)
 
 target_include_directories(lang PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 target_include_directories(lang PRIVATE ".")
-target_compile_features(lang PRIVATE cxx_std_11)
+target_compile_features(lang PRIVATE cxx_std_17)
