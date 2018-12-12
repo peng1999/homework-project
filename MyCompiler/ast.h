@@ -10,6 +10,8 @@ using std::vector;
 using std::unique_ptr;
 using std::string;
 
+enum class op_type { PLUS, MINUS, MUL, DIV, ABS, UMINUS, };
+
 struct env_scope {
     std::map<symbol, double> values;
     unique_ptr<env_scope> subenv;
@@ -34,7 +36,7 @@ public:
 
 class op_node: public ast_node {
 public:
-    enum op_type { PLUS, MINUS, MUL, DIV, ABS, UMINUS } type;
+    op_type type;
     unique_ptr<ast_node> l;
     unique_ptr<ast_node> r;
 

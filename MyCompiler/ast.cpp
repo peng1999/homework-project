@@ -1,3 +1,5 @@
+#include <memory>
+
 #include "ast.h"
 #include "intern.h"
 #include "parse.h"
@@ -9,33 +11,35 @@ double op_node::eval(env_scope &env)
 {
     double v = 0;
     switch (type) {
-        case PLUS:
+        case op_type::PLUS:
             v = l->eval(env) + r->eval(env);
             break;
-        case MINUS:
+        case op_type::MINUS:
             v = l->eval(env) - r->eval(env);
             break;
-        case MUL:
+        case op_type::MUL:
             v = l->eval(env) * r->eval(env);
             break;
-        case DIV:
+        case op_type::DIV:
             v = l->eval(env) / r->eval(env);
             break;
-        case ABS:
+        case op_type::ABS:
             v = std::abs(l->eval(env));
             break;
-        case UMINUS:
+        case op_type::UMINUS:
             v = -l->eval(env);
             break;
         default:
-            std::cerr << "internal error: bad node " << type << std::endl;
+            std::cerr << "internal error: bad node "
+                      << static_cast<int>(type)
+                      << std::endl;
     }
     return v;
 }
 
 env_scope& env_scope::spawn()
 {
-    subenv.reset(new env_scope);
+    subenv = std::make_unique<env_scope>();
     subenv->upper_env = this;
     return *subenv;
 }

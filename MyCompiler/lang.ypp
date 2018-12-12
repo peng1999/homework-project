@@ -38,13 +38,13 @@ calclist:
         ;
 
 exp: IDENT '=' exp              { $$ = new assign_node(*$1, $3); delete $1; }
-   | exp '+' exp                { $$ = new op_node(op_node::PLUS, $1, $3); }
-   | exp '-' exp                { $$ = new op_node(op_node::MINUS, $1, $3); }
-   | exp '*' exp                { $$ = new op_node(op_node::MUL, $1, $3); }
-   | exp '/' exp                { $$ = new op_node(op_node::DIV, $1, $3); }
-   | '|' exp '|'                { $$ = new op_node(op_node::ABS, $2, nullptr); }
+   | exp '+' exp                { $$ = new op_node(op_type::PLUS, $1, $3); }
+   | exp '-' exp                { $$ = new op_node(op_type::MINUS, $1, $3); }
+   | exp '*' exp                { $$ = new op_node(op_type::MUL, $1, $3); }
+   | exp '/' exp                { $$ = new op_node(op_type::DIV, $1, $3); }
+   | '|' exp '|'                { $$ = new op_node(op_type::ABS, $2, nullptr); }
    | '(' exp ')'                { $$ = $2; }
-   | '-' exp %prec UMINUS       { $$ = new op_node(op_node::UMINUS, $2, nullptr); }
+   | '-' exp %prec UMINUS       { $$ = new op_node(op_type::UMINUS, $2, nullptr); }
    | NUMBER                     { $$ = new num_node($1); }
    | IDENT                      { $$ = new var_node(*$1); delete $1; }
    ;
