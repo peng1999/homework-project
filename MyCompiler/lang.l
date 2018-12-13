@@ -18,6 +18,7 @@ EXP     ([Ee][-+]?[0-9]+)
 "(" |
 ")" |
 "="                     { return yytext[0]; }
+inf                     { return INF; }
 [a-z][a-zA-Z0-9]*       { yylval.id = new std::string(yytext, yyleng);
                           return IDENT;
                         }

@@ -6,6 +6,7 @@
 %{
 #include <cstdio>
 #include <iostream>
+#include <limits>
 extern int yylex();
 %}
 
@@ -20,6 +21,7 @@ extern int yylex();
 %token <d> NUMBER
 %token EOL
 %token <id> IDENT
+%token INF
 
 %right '='
 %left '+' '-'
@@ -50,6 +52,7 @@ exp: IDENT '=' exp              { $$ = new assign_node(*$1, $3); delete $1; }
    | '(' exp ')'                { $$ = $2; }
    | '-' exp %prec UMINUS       { $$ = new op_node(op_type::UMINUS, $2); }
    | NUMBER                     { $$ = new num_node($1); }
+   | INF                        { $$ = new num_node(std::numeric_limits<double>::infinity()); }
    | IDENT                      { $$ = new var_node(*$1); delete $1; }
    ;
 

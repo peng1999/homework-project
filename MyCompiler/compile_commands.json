@@ -1,27 +1,32 @@
 [
 {
-  "directory": "/home/pg999w/Projects/MyCompiler/test/cmake-build-debug",
-  "command": "/bin/c++   -I/home/pg999w/Projects/MyCompiler/test/cmake-build-debug -I/home/pg999w/Projects/MyCompiler/test/.  -g   -std=gnu++11 -o CMakeFiles/lang.dir/ast.cpp.o -c /home/pg999w/Projects/MyCompiler/test/ast.cpp",
-  "file": "/home/pg999w/Projects/MyCompiler/test/ast.cpp"
+  "directory": "/home/pg999w/Projects/homework-projects/MyCompiler/cmake-build-debug",
+  "command": "/bin/c++   -I/home/pg999w/Projects/homework-projects/MyCompiler/cmake-build-debug -I/home/pg999w/Projects/homework-projects/MyCompiler/.  -g   -std=gnu++17 -o CMakeFiles/lang.dir/ast.cpp.o -c /home/pg999w/Projects/homework-projects/MyCompiler/ast.cpp",
+  "file": "/home/pg999w/Projects/homework-projects/MyCompiler/ast.cpp"
 },
 {
-  "directory": "/home/pg999w/Projects/MyCompiler/test/cmake-build-debug",
-  "command": "/bin/c++   -I/home/pg999w/Projects/MyCompiler/test/cmake-build-debug -I/home/pg999w/Projects/MyCompiler/test/.  -g   -std=gnu++11 -o CMakeFiles/lang.dir/lang.tab.cpp.o -c /home/pg999w/Projects/MyCompiler/test/cmake-build-debug/lang.tab.cpp",
-  "file": "/home/pg999w/Projects/MyCompiler/test/cmake-build-debug/lang.tab.cpp"
+  "directory": "/home/pg999w/Projects/homework-projects/MyCompiler/cmake-build-debug",
+  "command": "/bin/c++   -I/home/pg999w/Projects/homework-projects/MyCompiler/cmake-build-debug -I/home/pg999w/Projects/homework-projects/MyCompiler/.  -g   -std=gnu++17 -o CMakeFiles/lang.dir/lang.tab.cpp.o -c /home/pg999w/Projects/homework-projects/MyCompiler/cmake-build-debug/lang.tab.cpp",
+  "file": "/home/pg999w/Projects/homework-projects/MyCompiler/cmake-build-debug/lang.tab.cpp"
 },
 {
-  "directory": "/home/pg999w/Projects/MyCompiler/test/cmake-build-debug",
-  "command": "/bin/c++   -I/home/pg999w/Projects/MyCompiler/test/cmake-build-debug -I/home/pg999w/Projects/MyCompiler/test/.  -g   -std=gnu++11 -o CMakeFiles/lang.dir/lang.yy.cpp.o -c /home/pg999w/Projects/MyCompiler/test/cmake-build-debug/lang.yy.cpp",
-  "file": "/home/pg999w/Projects/MyCompiler/test/cmake-build-debug/lang.yy.cpp"
+  "directory": "/home/pg999w/Projects/homework-projects/MyCompiler/cmake-build-debug",
+  "command": "/bin/c++   -I/home/pg999w/Projects/homework-projects/MyCompiler/cmake-build-debug -I/home/pg999w/Projects/homework-projects/MyCompiler/.  -g   -std=gnu++17 -o CMakeFiles/lang.dir/lang.yy.cpp.o -c /home/pg999w/Projects/homework-projects/MyCompiler/cmake-build-debug/lang.yy.cpp",
+  "file": "/home/pg999w/Projects/homework-projects/MyCompiler/cmake-build-debug/lang.yy.cpp"
 },
 {
-  "directory": "/home/pg999w/Projects/MyCompiler/test/cmake-build-debug",
-  "command": "/bin/c++   -I/home/pg999w/Projects/MyCompiler/test/cmake-build-debug -I/home/pg999w/Projects/MyCompiler/test/.  -g   -std=gnu++11 -o CMakeFiles/lang.dir/intern.cpp.o -c /home/pg999w/Projects/MyCompiler/test/intern.cpp",
-  "file": "/home/pg999w/Projects/MyCompiler/test/intern.cpp"
+  "directory": "/home/pg999w/Projects/homework-projects/MyCompiler/cmake-build-debug",
+  "command": "/bin/c++   -I/home/pg999w/Projects/homework-projects/MyCompiler/cmake-build-debug -I/home/pg999w/Projects/homework-projects/MyCompiler/.  -g   -std=gnu++17 -o CMakeFiles/lang.dir/intern.cpp.o -c /home/pg999w/Projects/homework-projects/MyCompiler/intern.cpp",
+  "file": "/home/pg999w/Projects/homework-projects/MyCompiler/intern.cpp"
 },
 {
-  "directory": "/home/pg999w/Projects/MyCompiler/test/cmake-build-debug",
-  "command": "/bin/c++   -I/home/pg999w/Projects/MyCompiler/test/cmake-build-debug -I/home/pg999w/Projects/MyCompiler/test/.  -g   -std=gnu++11 -o CMakeFiles/lang.dir/parse.cpp.o -c /home/pg999w/Projects/MyCompiler/test/parse.cpp",
-  "file": "/home/pg999w/Projects/MyCompiler/test/parse.cpp"
+  "directory": "/home/pg999w/Projects/homework-projects/MyCompiler/cmake-build-debug",
+  "command": "/bin/c++   -I/home/pg999w/Projects/homework-projects/MyCompiler/cmake-build-debug -I/home/pg999w/Projects/homework-projects/MyCompiler/.  -g   -std=gnu++17 -o CMakeFiles/lang.dir/parse.cpp.o -c /home/pg999w/Projects/homework-projects/MyCompiler/parse.cpp",
+  "file": "/home/pg999w/Projects/homework-projects/MyCompiler/parse.cpp"
+},
+{
+  "directory": "/home/pg999w/Projects/homework-projects/MyCompiler/cmake-build-debug",
+  "command": "/bin/c++   -I/home/pg999w/Projects/homework-projects/MyCompiler/cmake-build-debug -I/home/pg999w/Projects/homework-projects/MyCompiler/.  -g   -std=gnu++17 -o CMakeFiles/lang.dir/object.cpp.o -c /home/pg999w/Projects/homework-projects/MyCompiler/object.cpp",
+  "file": "/home/pg999w/Projects/homework-projects/MyCompiler/object.cpp"
 }
 ]
