@@ -34,9 +34,6 @@ public:
     virtual ~ast_node() = default;
 };
 
-//using node_list = std::vector<unique_ptr<ast_node>>;
-
-
 class op_node: public ast_node {
 public:
     op_type type;
@@ -79,6 +76,22 @@ public:
     unique_ptr<ast_node> value;
 
     assign_node(const string& n, ast_node* v): name(n), value(v) { }
+
+    object eval(env_scope &env) override;
+};
+
+using ast_node_list = std::vector<unique_ptr<ast_node>>;
+
+class fun_call_node: public ast_node {
+public:
+    symbol name;
+    ast_node_list params;
+
+    fun_call_node(const string& n, vector<ast_node*> v): name(n) {
+        for (auto arg: v) {
+            params.emplace_back(arg);
+        }
+    }
 
     object eval(env_scope &env) override;
 };

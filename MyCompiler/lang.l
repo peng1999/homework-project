@@ -1,8 +1,5 @@
 %{
 #include "lang.tab.hpp"
-#include "ast.h"
-#include "intern.h"
-#include "parse.h"
 %}
 %option noyywrap nodefault yylineno
 
@@ -17,6 +14,7 @@ EXP     ([Ee][-+]?[0-9]+)
 "|" |
 "(" |
 ")" |
+"," |
 "="                     { return yytext[0]; }
 inf                     { return INF; }
 [a-z][a-zA-Z0-9]*       { yylval.id = new std::string(yytext, yyleng);

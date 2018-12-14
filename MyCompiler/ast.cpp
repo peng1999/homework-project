@@ -77,3 +77,25 @@ object assign_node::eval(env_scope &env)
     return ret;
 }
 
+object fun_call_node::eval(env_scope &env) {
+    static std::map<symbol, std::function<double(vector<double>)>> predefined_fun {
+            {symbol("sin"), [](vector<double> x) { return std::sin(x[0]); }},
+            {symbol("cos"), [](vector<double> x) { return std::cos(x[0]); }},
+            {symbol("tan"), [](vector<double> x) { return std::tan(x[0]); }},
+            {symbol("abs"), [](vector<double> x) { return std::abs(x[0]); }},
+    };
+
+    auto funp = predefined_fun.find(name);
+    if (funp == predefined_fun.end()) {
+        return object::make_err("function not defined");
+    }
+    vector<object> args;
+    std::transform(
+            params.begin(),
+            params.end(),
+            std::back_inserter(args),
+            [&](auto &x) { return x->eval(env); });
+
+    return object::operate(funp->second, args);
+}
+
