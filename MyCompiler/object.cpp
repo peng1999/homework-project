@@ -25,11 +25,11 @@ object object::operate(const op_fun &op_type, const vector<object> &args) {
 }
 
 object object::make_err(const std::string &m) {
-    return object(std::variant<double, error_obj>(error_obj(m)));
+    return object(error_obj(m));
 }
 
 object object::make_num(double v) {
-    return object(std::variant<double, error_obj>(v));
+    return object(v);
 }
 
 bool object::is_err() const {
