@@ -8,9 +8,6 @@ std::set<string> symtab;
 
 symbol::symbol(const string &n)
 {
-    auto it = symtab.find(n);
-    if (it == symtab.end()) {
-        it = symtab.insert(n).first;
-    }
+    auto it = symtab.insert(n).first;
     this->sym_p = it;
 }
