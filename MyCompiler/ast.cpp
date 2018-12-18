@@ -81,13 +81,16 @@ object assign_node::eval(env_scope &env)
     return ret;
 }
 
+//object eval_ufun(env_scope &env, )
+
 object fun_call_node::eval(env_scope &env) {
     // Predefined functions
-    static std::map<symbol, std::function<double(vector<double>)>> predefined_fun {
-            {symbol("sin"), [](vector<double> x) { return std::sin(x[0]); }},
-            {symbol("cos"), [](vector<double> x) { return std::cos(x[0]); }},
-            {symbol("tan"), [](vector<double> x) { return std::tan(x[0]); }},
-            {symbol("abs"), [](vector<double> x) { return std::abs(x[0]); }},
+    static std::map<symbol, std::pair<int, std::function<double(vector<double>)>>>
+            predefined_fun {
+            {symbol("sin"), {1, [](vector<double> x) { return std::sin(x[0]); }}},
+            {symbol("cos"), {1, [](vector<double> x) { return std::cos(x[0]); }}},
+            {symbol("tan"), {1, [](vector<double> x) { return std::tan(x[0]); }}},
+            {symbol("abs"), {1, [](vector<double> x) { return std::abs(x[0]); }}},
     };
 
     // Find predefined finction first
@@ -102,14 +105,18 @@ object fun_call_node::eval(env_scope &env) {
 
         } else {
             // user defined function found, spawn a sub-environment
-            auto& subenv = env.spawn();
             auto& [arg, body] = ufunp->second;
+
+            if (params.size() != arg.size()) {
+                return object::make_err("invalid argument count");
+            }
+
+            auto& subenv = env.spawn();
             for (int i = 0; i < params.size(); ++i) {
                 symbol &s = arg[i];
                 ast_node &ast = *params[i];
                 subenv.values.insert({s, ast.eval(env)});
             }
-
             auto res = body->eval(subenv);
             env.release_child();
 
@@ -125,7 +132,12 @@ object fun_call_node::eval(env_scope &env) {
             std::back_inserter(args),
             [&](auto &x) { return x->eval(env); });
 
-    return object::operate(funp->second, args);
+    auto& [argc, fun] = funp->second;
+    if (argc != args.size()) {
+        return object::make_err("invalid argument count");
+    }
+
+    return object::operate(fun, args);
 }
 
 object fun_def_node::eval(env_scope &env) {
