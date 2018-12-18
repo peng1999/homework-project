@@ -81,7 +81,27 @@ object assign_node::eval(env_scope &env)
     return ret;
 }
 
-//object eval_ufun(env_scope &env, )
+object eval_ufun(
+        env_scope &env,
+        std::map<symbol, fun_body>::iterator &ufunp,
+        ast_node_list &params) {
+    auto& [arg, body] = ufunp->second;
+
+    if (params.size() != arg.size()) {
+        return object::make_err("invalid argument count");
+    }
+
+    auto& subenv = env.spawn();
+    for (int i = 0; i < params.size(); ++i) {
+        symbol &s = arg[i];
+        ast_node &ast = *params[i];
+        subenv.values.insert({s, ast.eval(env)});
+    }
+    auto res = body->eval(subenv);
+    env.release_child();
+
+    return res;
+}
 
 object fun_call_node::eval(env_scope &env) {
     // Predefined functions
@@ -105,22 +125,7 @@ object fun_call_node::eval(env_scope &env) {
 
         } else {
             // user defined function found, spawn a sub-environment
-            auto& [arg, body] = ufunp->second;
-
-            if (params.size() != arg.size()) {
-                return object::make_err("invalid argument count");
-            }
-
-            auto& subenv = env.spawn();
-            for (int i = 0; i < params.size(); ++i) {
-                symbol &s = arg[i];
-                ast_node &ast = *params[i];
-                subenv.values.insert({s, ast.eval(env)});
-            }
-            auto res = body->eval(subenv);
-            env.release_child();
-
-            return res;
+            return eval_ufun(env, ufunp, params);
         }
     }
 
