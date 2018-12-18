@@ -69,6 +69,10 @@ object env_scope::get_val(const symbol &s)
     return it->second;
 }
 
+void env_scope::release_child() {
+    subenv.reset();
+}
+
 object assign_node::eval(env_scope &env)
 {
     object ret = value->eval(env);
@@ -78,6 +82,7 @@ object assign_node::eval(env_scope &env)
 }
 
 object fun_call_node::eval(env_scope &env) {
+    // Predefined functions
     static std::map<symbol, std::function<double(vector<double>)>> predefined_fun {
             {symbol("sin"), [](vector<double> x) { return std::sin(x[0]); }},
             {symbol("cos"), [](vector<double> x) { return std::cos(x[0]); }},
@@ -85,10 +90,34 @@ object fun_call_node::eval(env_scope &env) {
             {symbol("abs"), [](vector<double> x) { return std::abs(x[0]); }},
     };
 
+    // Find predefined finction first
     auto funp = predefined_fun.find(name);
     if (funp == predefined_fun.end()) {
-        return object::make_err("function not defined");
+
+        // If doesn't exists, try user defined funtions in env
+        auto ufunp = env.funcs.find(name);
+        if (ufunp == env.funcs.end()) {
+            // non of them found, return error
+            return object::make_err("function not defined");
+
+        } else {
+            // user defined function found, spawn a sub-environment
+            auto& subenv = env.spawn();
+            auto& [arg, body] = ufunp->second;
+            for (int i = 0; i < params.size(); ++i) {
+                symbol &s = arg[i];
+                ast_node &ast = *params[i];
+                subenv.values.insert({s, ast.eval(env)});
+            }
+
+            auto res = body->eval(subenv);
+            env.release_child();
+
+            return res;
+        }
     }
+
+    // predefined function found, calculate it
     vector<object> args;
     std::transform(
             params.begin(),
@@ -99,3 +128,7 @@ object fun_call_node::eval(env_scope &env) {
     return object::operate(funp->second, args);
 }
 
+object fun_def_node::eval(env_scope &env) {
+    env.funcs.insert_or_assign(name, fun_body {params, std::move(body)});
+    return object(defined_obj(name.get_string()));
+}

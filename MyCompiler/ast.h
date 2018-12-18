@@ -15,12 +15,21 @@ using std::vector;
 
 enum class op_type { PLUS, MINUS, MUL, DIV, ABS, UMINUS, };
 
+class ast_node;
+
+struct fun_body {
+    vector<symbol> params;
+    unique_ptr<ast_node> body;
+};
+
 struct env_scope {
     std::map<symbol, object> values;
+    std::map<symbol, fun_body> funcs;
     unique_ptr<env_scope> subenv;
     env_scope* upper_env;
 
     env_scope& spawn();
+    void release_child();
 
     object get_val(const symbol &s);
 };
@@ -92,6 +101,20 @@ public:
             params.emplace_back(arg);
         }
     }
+
+    object eval(env_scope &env) override;
+};
+
+using sym_list = std::vector<symbol>;
+
+class fun_def_node: public ast_node {
+public:
+    symbol name;
+    sym_list params;
+    unique_ptr<ast_node> body;
+
+    fun_def_node(const string &name, sym_list params, ast_node* body)
+        : name(name), params(std::move(params)), body(body) {}
 
     object eval(env_scope &env) override;
 };

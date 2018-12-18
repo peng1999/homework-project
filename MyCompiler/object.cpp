@@ -49,3 +49,7 @@ std::ostream &operator<<(std::ostream &out, object o) {
                o.val);
     return out;
 }
+
+std::ostream &operator<<(std::ostream &out, defined_obj d) {
+    return out << d.name << " defined.";
+}
