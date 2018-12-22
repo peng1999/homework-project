@@ -31,7 +31,7 @@ extern int yylex();
 %nonassoc UMINUS
 
 %type <a> exp
-%type <enl> exp_list
+%type <enl> exp_list exp_list_semi
 %type <syl> name_list
 
 %destructor { delete $$; } <id>
@@ -52,6 +52,7 @@ calclist:
 exp: IDENT '=' exp              { $$ = new assign_node(*$1, $3); }
    | FUN IDENT '(' name_list ')' '=' exp
                                 { $$ = new fun_def_node(*$2, *$4, $7); delete $4; }
+   | '{' exp_list_semi '}'      { $$ = new block_node(*$2); delete $2; }
    | IDENT '(' exp_list ')'     { $$ = new fun_call_node(*$1, std::move(*$3)); }
    | exp '+' exp                { $$ = new op_node(op_type::PLUS, $1, $3); }
    | exp '-' exp                { $$ = new op_node(op_type::MINUS, $1, $3); }
@@ -68,6 +69,14 @@ exp: IDENT '=' exp              { $$ = new assign_node(*$1, $3); }
 exp_list:                       { $$ = new vector<ast_node*> {}; }
         | exp                   { $$ = new vector<ast_node*> {$1}; }
         | exp_list ',' exp      { $1->push_back($3); $$ = $1; }
+        ;
+
+exp_list_semi:                  { $$ = new vector<ast_node*> {}; }
+        | exp                   { $$ = new vector<ast_node*> {$1}; }
+        | exp_list_semi EOL
+        | exp_list_semi ';'
+        | exp_list_semi EOL exp { $1->push_back($3); $$ = $1; }
+        | exp_list_semi ';' exp { $1->push_back($3); $$ = $1; }
         ;
 
 name_list:                      { $$ = new vector<symbol> {}; }

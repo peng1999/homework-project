@@ -24,11 +24,13 @@ public:
     explicit defined_obj(std::string n): name(std::move(n)) {}
 };
 
+struct void_obj {};
+
 using op_fun = std::function<double(const vector<double> &)>;
 
 class object {
 public:
-    using variant_t = std::variant<double, error_obj, defined_obj>;
+    using variant_t = std::variant<double, error_obj, defined_obj, void_obj>;
     variant_t val;
 
     explicit object(variant_t v): val(std::move(v)) { }
@@ -39,6 +41,7 @@ public:
 
     static object make_err(const std::string& m);
     static object make_num(double v);
+    static object make_void();
     static object operate( const op_fun &op_type, const vector<object> &args);
 };
 
@@ -47,3 +50,5 @@ std::ostream& operator<<(std::ostream &out, error_obj o);
 std::ostream& operator<<(std::ostream &out, object o);
 
 std::ostream& operator<<(std::ostream &out, defined_obj d);
+
+std::ostream& operator<<(std::ostream &out, void_obj d);

@@ -118,3 +118,16 @@ public:
 
     object eval(env_scope &env) override;
 };
+
+class block_node: public ast_node {
+public:
+    vector<unique_ptr<ast_node>> sentences;
+
+    explicit block_node(vector<ast_node*> insts) {
+        for (auto p: insts) {
+            sentences.emplace_back(p);
+        }
+    }
+
+    object eval(env_scope &env) override;
+};

@@ -149,3 +149,11 @@ object fun_def_node::eval(env_scope &env) {
     env.funcs.insert_or_assign(name, fun_body {params, std::move(body)});
     return object(defined_obj(name.get_string()));
 }
+
+object block_node::eval(env_scope &env) {
+    object a = object::make_void();
+    for (auto& in: sentences) {
+        a = in->eval(env);
+    }
+    return a;
+}

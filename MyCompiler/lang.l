@@ -15,6 +15,9 @@ EXP     ([Ee][-+]?[0-9]+)
 "(" |
 ")" |
 "," |
+";" |
+"{" |
+"}" |
 "="                     { return yytext[0]; }
 inf                     { return INF; }
 fun                     { return FUN; }

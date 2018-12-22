@@ -40,6 +40,10 @@ bool object::is_num() const {
     return std::holds_alternative<double>(val);
 }
 
+object object::make_void() {
+    return object(void_obj());
+}
+
 std::ostream &operator<<(std::ostream &out, error_obj o) {
     return out << "error: " << o.message;
 }
@@ -52,4 +56,8 @@ std::ostream &operator<<(std::ostream &out, object o) {
 
 std::ostream &operator<<(std::ostream &out, defined_obj d) {
     return out << d.name << " defined.";
+}
+
+std::ostream &operator<<(std::ostream &out, void_obj d) {
+    return out << "void";
 }
