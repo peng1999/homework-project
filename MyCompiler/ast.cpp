@@ -147,7 +147,7 @@ object fun_call_node::eval(env_scope &env) {
 
 object fun_def_node::eval(env_scope &env) {
     env.funcs.insert_or_assign(name, fun_body {params, std::move(body)});
-    return object(defined_obj(name.get_string()));
+    return object::make_def_msg(name.get_string());
 }
 
 object block_node::eval(env_scope &env) {
