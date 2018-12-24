@@ -15,6 +15,8 @@ public:
     std::string message;
 
     explicit error_obj(std::string m): message(std::move(m)) {}
+
+    bool operator== (const error_obj& rhs) const { return message == rhs.message; }
 };
 
 class defined_obj {
@@ -22,9 +24,14 @@ public:
     std::string name;
 
     explicit defined_obj(std::string n): name(std::move(n)) {}
+
+    bool operator== (const defined_obj& rhs) const { return name == rhs.name; }
 };
 
-struct void_obj {};
+struct void_obj {
+public:
+    bool operator== (const void_obj& rhs) const { return true; }
+};
 
 using op_fun = std::function<double(const vector<double> &)>;
 
@@ -37,7 +44,8 @@ public:
 
     bool is_num() const;
 
-    bool is_err() const;
+    bool operator== (const object& rhs) const { return val == rhs.val; }
+    bool operator!= (const object& rhs) const { return !(val == rhs.val); }
 
     static object make_err(const std::string& m);
     static object make_num(double v);

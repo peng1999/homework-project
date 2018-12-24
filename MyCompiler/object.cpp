@@ -32,10 +32,6 @@ object object::make_num(double v) {
     return object(v);
 }
 
-bool object::is_err() const {
-    return std::holds_alternative<error_obj>(val);
-}
-
 bool object::is_num() const {
     return std::holds_alternative<double>(val);
 }

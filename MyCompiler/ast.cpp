@@ -157,3 +157,15 @@ object block_node::eval(env_scope &env) {
     }
     return a;
 }
+
+object if_node::eval(env_scope &env) {
+    if (cond->eval(env) == object(0)) {
+        if (else_block) {
+            return else_block->eval(env);
+        } else {
+            return object::make_void();
+        }
+    } else {
+        return if_block->eval(env);
+    }
+}

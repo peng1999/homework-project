@@ -131,3 +131,20 @@ public:
 
     object eval(env_scope &env) override;
 };
+
+class if_node: public ast_node {
+public:
+    unique_ptr<ast_node> cond;
+    unique_ptr<block_node> if_block;
+    unique_ptr<block_node> else_block;
+
+    if_node(ast_node* cond, std::vector<ast_node*> if_b)
+        : cond(cond), if_block(new block_node(std::move(if_b))), else_block() { }
+
+    if_node(ast_node* cond, std::vector<ast_node*> if_b, std::vector<ast_node*> else_b)
+        : cond(cond),
+          if_block(new block_node(std::move(if_b))),
+          else_block(new block_node(std::move(else_b))) { }
+
+    object eval(env_scope &env) override;
+};
