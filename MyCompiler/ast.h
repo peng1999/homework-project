@@ -1,4 +1,3 @@
-#pragma once
 #include <vector>
 #include <memory>
 #include <map>
@@ -7,6 +6,7 @@
 #include "intern.h"
 #include "object.h"
 
+#pragma once
 
 using std::vector;
 using std::unique_ptr;

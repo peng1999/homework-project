@@ -1,7 +1,7 @@
-#pragma once
-
 #include <set>
 #include <string>
+
+#pragma once
 
 using std::string;
 
