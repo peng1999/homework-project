@@ -6,8 +6,7 @@
 
 std::set<string> symtab;
 
-symbol::symbol(const string &n)
-{
+symbol::symbol(const string &n) {
     auto it = symtab.insert(n).first;
     this->sym_p = it;
 }

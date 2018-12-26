@@ -3,24 +3,22 @@
 #include "parse.h"
 #include <cmath>
 #include <memory>
-#include <iostream>
 #include <algorithm>
 
-object op_node::eval(env_scope &env)
-{
+object op_node::eval(env_scope &env) {
     vector<object> objs;
     std::transform(
             args.begin(),
             args.end(),
             std::back_inserter(objs),
-            [&](auto& a) { return a->eval(env); });
+            [&](auto &a) { return a->eval(env); });
 
-    auto plus_fn = [](auto& arg) { return arg[0] + arg[1]; };
-    auto minus_fn = [](auto& arg) { return arg[0] - arg[1]; };
-    auto mul_fn = [](auto& arg) { return arg[0] * arg[1]; };
-    auto div_fn = [](auto& arg) { return arg[0] / arg[1]; };
-    auto abs_fn = [](auto& arg) { return std::abs(arg[0]); };
-    auto neg_fn = [](auto& arg) { return -(arg[0]); };
+    auto plus_fn = [](auto &arg) { return arg[0] + arg[1]; };
+    auto minus_fn = [](auto &arg) { return arg[0] - arg[1]; };
+    auto mul_fn = [](auto &arg) { return arg[0] * arg[1]; };
+    auto div_fn = [](auto &arg) { return arg[0] / arg[1]; };
+    auto abs_fn = [](auto &arg) { return std::abs(arg[0]); };
+    auto neg_fn = [](auto &arg) { return -(arg[0]); };
 
     switch (type) {
         case op_type::PLUS:
@@ -49,15 +47,13 @@ object op_node::eval(env_scope &env)
     }
 }
 
-env_scope& env_scope::spawn()
-{
+env_scope &env_scope::spawn() {
     subenv = std::make_unique<env_scope>();
     subenv->upper_env = this;
     return *subenv;
 }
 
-object env_scope::get_val(const symbol &s)
-{
+object env_scope::get_val(const symbol &s) {
     auto it = values.find(s);
     if (it == values.end()) {
         if (upper_env == nullptr) {
@@ -73,8 +69,7 @@ void env_scope::release_child() {
     subenv.reset();
 }
 
-object assign_node::eval(env_scope &env)
-{
+object assign_node::eval(env_scope &env) {
     object ret = value->eval(env);
     // env.values[name] = ret;
     env.values.insert_or_assign(name, ret);
@@ -85,13 +80,13 @@ object eval_ufun(
         env_scope &env,
         std::map<symbol, fun_body>::iterator &ufunp,
         ast_node_list &params) {
-    auto& [arg, body] = ufunp->second;
+    auto&[arg, body] = ufunp->second;
 
     if (params.size() != arg.size()) {
         return object::make_err("invalid argument count");
     }
 
-    auto& subenv = env.spawn();
+    auto &subenv = env.spawn();
     for (int i = 0; i < params.size(); ++i) {
         symbol &s = arg[i];
         ast_node &ast = *params[i];
@@ -106,7 +101,7 @@ object eval_ufun(
 object fun_call_node::eval(env_scope &env) {
     // Predefined functions
     static std::map<symbol, std::pair<int, std::function<double(vector<double>)>>>
-            predefined_fun {
+            predefined_fun{
             {symbol("sin"), {1, [](vector<double> x) { return std::sin(x[0]); }}},
             {symbol("cos"), {1, [](vector<double> x) { return std::cos(x[0]); }}},
             {symbol("tan"), {1, [](vector<double> x) { return std::tan(x[0]); }}},
@@ -137,7 +132,7 @@ object fun_call_node::eval(env_scope &env) {
             std::back_inserter(args),
             [&](auto &x) { return x->eval(env); });
 
-    auto& [argc, fun] = funp->second;
+    auto&[argc, fun] = funp->second;
     if (argc != args.size()) {
         return object::make_err("invalid argument count");
     }
@@ -146,13 +141,13 @@ object fun_call_node::eval(env_scope &env) {
 }
 
 object fun_def_node::eval(env_scope &env) {
-    env.funcs.insert_or_assign(name, fun_body {params, std::move(body)});
+    env.funcs.insert_or_assign(name, fun_body{params, std::move(body)});
     return object::make_def_msg(name.get_string());
 }
 
 object block_node::eval(env_scope &env) {
     object a = object::make_void();
-    for (auto& in: sentences) {
+    for (auto &in: sentences) {
         a = in->eval(env);
     }
     return a;

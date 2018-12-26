@@ -1,11 +1,10 @@
 #include "object.h"
-#include <memory>
 #include <cmath>
 
 using std::make_unique;
 
 namespace utility {
-    const char* NUM_ERROR = "Cannot add a non-number to number";
+    const char *NUM_ERROR = "Cannot add a non-number to number";
 }
 
 object object::operate(const op_fun &op_type, const vector<object> &args) {
@@ -45,7 +44,7 @@ object object::make_def_msg(const std::string &m) {
 }
 
 std::ostream &operator<<(std::ostream &out, object o) {
-    std::visit([&](auto && obj) { out << obj; },
+    std::visit([&](auto &&obj) { out << obj; },
                o.val);
     return out;
 }

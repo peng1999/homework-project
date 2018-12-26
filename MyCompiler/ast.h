@@ -13,7 +13,9 @@ using std::unique_ptr;
 using std::string;
 using std::vector;
 
-enum class op_type { PLUS, MINUS, MUL, DIV, ABS, UMINUS, };
+enum class op_type {
+    PLUS, MINUS, MUL, DIV, ABS, UMINUS,
+};
 
 class ast_node;
 
@@ -26,9 +28,10 @@ struct env_scope {
     std::map<symbol, object> values;
     std::map<symbol, fun_body> funcs;
     unique_ptr<env_scope> subenv;
-    env_scope* upper_env;
+    env_scope *upper_env;
 
-    env_scope& spawn();
+    env_scope &spawn();
+
     void release_child();
 
     object get_val(const symbol &s);
@@ -40,10 +43,11 @@ extern env_scope env;
 class ast_node {
 public:
     virtual object eval(env_scope &env) = 0;
+
     virtual ~ast_node() = default;
 };
 
-class op_node: public ast_node {
+class op_node : public ast_node {
 public:
     op_type type;
 
@@ -52,51 +56,51 @@ public:
     object eval(env_scope &env) override;
 
     ~op_node() override = default;
-    
-    op_node(op_type t, ast_node* _l, ast_node* _r) : type(t) {
+
+    op_node(op_type t, ast_node *_l, ast_node *_r) : type(t) {
         args.emplace_back(_l);
         args.emplace_back(_r);
     }
 
-    op_node(op_type t, ast_node* a) : type(t) { args.emplace_back(a); }
+    op_node(op_type t, ast_node *a) : type(t) { args.emplace_back(a); }
 };
 
-class num_node: public ast_node {
+class num_node : public ast_node {
 public:
     double number;
 
     object eval(env_scope &env) override { return object::make_num(number); }
 
-    explicit num_node(double n): number(n) {}
+    explicit num_node(double n) : number(n) {}
 };
 
-class var_node: public ast_node {
+class var_node : public ast_node {
 public:
     symbol name;
 
-    explicit var_node(const string& n): name(n) { }
+    explicit var_node(const string &n) : name(n) {}
 
     object eval(env_scope &env) override { return env.get_val(name); }
 };
 
-class assign_node: public ast_node {
+class assign_node : public ast_node {
 public:
     symbol name;
     unique_ptr<ast_node> value;
 
-    assign_node(const string& n, ast_node* v): name(n), value(v) { }
+    assign_node(const string &n, ast_node *v) : name(n), value(v) {}
 
     object eval(env_scope &env) override;
 };
 
 using ast_node_list = std::vector<unique_ptr<ast_node>>;
 
-class fun_call_node: public ast_node {
+class fun_call_node : public ast_node {
 public:
     symbol name;
     ast_node_list params;
 
-    fun_call_node(const string& n, vector<ast_node*> v): name(n) {
+    fun_call_node(const string &n, vector<ast_node *> v) : name(n) {
         for (auto arg: v) {
             params.emplace_back(arg);
         }
@@ -107,23 +111,23 @@ public:
 
 using sym_list = std::vector<symbol>;
 
-class fun_def_node: public ast_node {
+class fun_def_node : public ast_node {
 public:
     symbol name;
     sym_list params;
     unique_ptr<ast_node> body;
 
-    fun_def_node(const string &name, sym_list params, ast_node* body)
-        : name(name), params(std::move(params)), body(body) {}
+    fun_def_node(const string &name, sym_list params, ast_node *body)
+            : name(name), params(std::move(params)), body(body) {}
 
     object eval(env_scope &env) override;
 };
 
-class block_node: public ast_node {
+class block_node : public ast_node {
 public:
     vector<unique_ptr<ast_node>> sentences;
 
-    explicit block_node(vector<ast_node*> insts) {
+    explicit block_node(vector<ast_node *> insts) {
         for (auto p: insts) {
             sentences.emplace_back(p);
         }
@@ -132,19 +136,19 @@ public:
     object eval(env_scope &env) override;
 };
 
-class if_node: public ast_node {
+class if_node : public ast_node {
 public:
     unique_ptr<ast_node> cond;
     unique_ptr<block_node> if_block;
     unique_ptr<block_node> else_block;
 
-    if_node(ast_node* cond, std::vector<ast_node*> if_b)
-        : cond(cond), if_block(new block_node(std::move(if_b))), else_block() { }
+    if_node(ast_node *cond, std::vector<ast_node *> if_b)
+            : cond(cond), if_block(new block_node(std::move(if_b))), else_block() {}
 
-    if_node(ast_node* cond, std::vector<ast_node*> if_b, std::vector<ast_node*> else_b)
-        : cond(cond),
-          if_block(new block_node(std::move(if_b))),
-          else_block(new block_node(std::move(else_b))) { }
+    if_node(ast_node *cond, std::vector<ast_node *> if_b, std::vector<ast_node *> else_b)
+            : cond(cond),
+              if_block(new block_node(std::move(if_b))),
+              else_block(new block_node(std::move(else_b))) {}
 
     object eval(env_scope &env) override;
 };
