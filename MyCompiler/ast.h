@@ -94,6 +94,13 @@ public:
     }
 
     object eval(env_scope &env) override;
+
+private:
+    using double_vec_fun = std::function<double(const vector<double>&)>;
+    using fun_pool_t = std::map<symbol, std::pair<int, double_vec_fun>>;
+    // Predefined functions, must be a function to become CERT Coding Guidelines
+    // compatitable
+    static fun_pool_t& predefined_fun();
 };
 
 using sym_list = std::vector<symbol>;

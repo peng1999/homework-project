@@ -34,6 +34,7 @@ object assign_node::eval(env_scope &env) {
     return ret;
 }
 
+// eval user defined function
 object eval_ufun(
         env_scope &env,
         std::map<symbol, fun_body>::iterator &ufunp,
@@ -56,31 +57,32 @@ object eval_ufun(
     return res;
 }
 
-object fun_call_node::eval(env_scope &env) {
-    using double_vec_fun = std::function<double(const vector<double>&)>;
-    // Predefined functions
-    static std::map<symbol, std::pair<int, double_vec_fun>> predefined_fun{
-            {symbol("sin"), {1, [](const auto &arg) { return std::sin(arg[0]); }}},
-            {symbol("cos"), {1, [](const auto &arg) { return std::cos(arg[0]); }}},
-            {symbol("tan"), {1, [](const auto &arg) { return std::tan(arg[0]); }}},
-            {symbol("abs"), {1, [](const auto &arg) { return std::abs(arg[0]); }}},
-            {symbol("+"), {2, [](const auto &arg) { return arg[0] + arg[1]; }}},
-            {symbol("-"), {2, [](const auto &arg) { return arg[0] - arg[1]; }}},
-            {symbol("*"), {2, [](const auto &arg) { return arg[0] * arg[1]; }}},
-            {symbol("/"), {2, [](const auto &arg) { return arg[0] / arg[1]; }}},
-            {symbol("<"), {2, [](const auto &arg) { return arg[0] < arg[1]; }}},
-            {symbol(">"), {2, [](const auto &arg) { return arg[0] > arg[1]; }}},
-            {symbol("<="), {2, [](const auto &arg) { return arg[0] <= arg[1]; }}},
-            {symbol(">="), {2, [](const auto &arg) { return arg[0] >= arg[1]; }}},
-            {symbol("=="), {2, [](const auto &arg) { return arg[0] == arg[1]; }}},
-            {symbol("!="), {2, [](const auto &arg) { return arg[0] != arg[1]; }}},
-            {symbol("!"), {1, [](const auto &arg) { return !arg[0]; }}},
-            {symbol("~-"), {1, [](const auto &arg) { return -(arg[0]); }}},
+fun_call_node::fun_pool_t& fun_call_node::predefined_fun() {
+    static fun_pool_t v = {
+        {symbol("sin"), {1, [](const auto &arg) { return std::sin(arg[0]); }}},
+        {symbol("cos"), {1, [](const auto &arg) { return std::cos(arg[0]); }}},
+        {symbol("tan"), {1, [](const auto &arg) { return std::tan(arg[0]); }}},
+        {symbol("abs"), {1, [](const auto &arg) { return std::abs(arg[0]); }}},
+        {symbol("+"),   {2, [](const auto &arg) { return arg[0] + arg[1]; }}},
+        {symbol("-"),   {2, [](const auto &arg) { return arg[0] - arg[1]; }}},
+        {symbol("*"),   {2, [](const auto &arg) { return arg[0] * arg[1]; }}},
+        {symbol("/"),   {2, [](const auto &arg) { return arg[0] / arg[1]; }}},
+        {symbol("<"),   {2, [](const auto &arg) { return arg[0] < arg[1]; }}},
+        {symbol(">"),   {2, [](const auto &arg) { return arg[0] > arg[1]; }}},
+        {symbol("<="),  {2, [](const auto &arg) { return arg[0] <= arg[1]; }}},
+        {symbol(">="),  {2, [](const auto &arg) { return arg[0] >= arg[1]; }}},
+        {symbol("=="),  {2, [](const auto &arg) { return arg[0] == arg[1]; }}},
+        {symbol("!="),  {2, [](const auto &arg) { return arg[0] != arg[1]; }}},
+        {symbol("!"),   {1, [](const auto &arg) { return !arg[0]; }}},
+        {symbol("~-"),  {1, [](const auto &arg) { return -(arg[0]); }}},
     };
+    return v;
+};
 
+object fun_call_node::eval(env_scope &env) {
     // Find predefined finction first
-    auto funp = predefined_fun.find(name);
-    if (funp == predefined_fun.end()) {
+    auto funp = predefined_fun().find(name);
+    if (funp == predefined_fun().end()) {
 
         // If doesn't exists, try user defined funtions in env
         auto ufunp = env.funcs.find(name);
