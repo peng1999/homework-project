@@ -1,0 +1,38 @@
+digraph {
+    rankdir=BT
+    node [shape=plaintext]
+
+    "object.cpp" [label=<<u>object.cpp</u>>]
+    "ast.cpp" [label=<<u>ast.cpp</u>>]
+    "intern.cpp" [label=<<u>intern.cpp</u>>]
+    "parse.cpp" [label=<<u>parse.cpp</u>>]
+    "lang.tab.cpp" [label=<<u>lang.tab.cpp</u>>]
+    "lang.yy.cpp" [label=<<u>lang.yy.cpp</u>>]
+
+    "object.cpp" -> "object.h"
+    "ast.h" -> "object.h"
+    "ast.cpp" -> "object.h"
+    "intern.cpp" -> "intern.h"
+    "ast.h" -> "intern.h"
+    "ast.cpp" -> "intern.h"
+    "parse.cpp" -> "parse.h"
+    "lang.tab.hpp" -> "parse.h"
+    "ast.cpp" -> "ast.h"
+    "parse.cpp" -> "ast.h"
+    "lang.tab.hpp" -> "ast.h"
+    "lang.tab.cpp" -> "lang.tab.hpp"
+    "lang.yy.cpp" -> "lang.tab.hpp"
+
+    subgraph cluster1 {
+        graph [style=filled]
+        label="lang.ypp"
+        "lang.tab.hpp"
+        "lang.tab.cpp"
+    }
+
+    subgraph cluster2 {
+        graph [style=filled]
+        label="lang.l"
+        "lang.yy.cpp"
+    }
+}
