@@ -146,3 +146,13 @@ public:
 
     object eval(env_scope &env) override;
 };
+
+class while_node : public ast_node {
+public:
+    unique_ptr<ast_node> cond;
+    unique_ptr<block_node> block;
+
+    while_node(ast_node *cond, vector<ast_node *> block);
+
+    object eval(env_scope &env) override;
+};

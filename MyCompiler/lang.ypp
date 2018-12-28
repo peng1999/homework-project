@@ -24,7 +24,7 @@ extern int yylex();
 %token EOL
 %token <id> IDENT
 /* keywords */
-%token INF FUN IF ELSE
+%token INF FUN IF ELSE WHILE
 %token LE GE EQ NE
 
 %nonassoc '<' '>' LE GE EQ NE
@@ -57,11 +57,13 @@ exp: IDENT '=' exp              { $$ = new assign_node(*$1, $3); }
    | FUN IDENT '(' name_list ')' '=' exp
                                 { $$ = new fun_def_node(*$2, *$4, $7); delete $4; }
 
-   /* if statment */
+   /* branch statment */
    | IF exp '{' exp_list_semi '}'
                                 { $$ = new if_node($2, *$4); delete $4; }
    | IF exp '{' exp_list_semi '}' ELSE '{' exp_list_semi '}'
                                 { $$ = new if_node($2, *$4, *$8); delete $4; delete $8; }
+   | WHILE exp '{' exp_list_semi '}'
+                                { $$ = new while_node($2, *$4); delete $4; }
 
    /* block */
    | '{' exp_list_semi '}'      { $$ = new block_node(*$2); delete $2; }

@@ -136,3 +136,13 @@ object if_node::eval(env_scope &env) {
         return if_block->eval(env);
     }
 }
+
+while_node::while_node(ast_node *cond, vector<ast_node *> block)
+        : cond(cond), block(new block_node(std::move(block))) {}
+
+object while_node::eval(env_scope &env) {
+    while (cond->eval(env) != object(0)) {
+        block->eval(env);
+    }
+    return object::make_void();
+}
