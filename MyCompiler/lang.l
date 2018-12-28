@@ -12,6 +12,9 @@ EXP     ([Ee][-+]?[0-9]+)
 "*" |
 "/" |
 "|" |
+"<" |
+">" |
+"!" |
 "(" |
 ")" |
 "," |
@@ -19,6 +22,10 @@ EXP     ([Ee][-+]?[0-9]+)
 "{" |
 "}" |
 "="                     { return yytext[0]; }
+"<="                    { return LE; }
+">="                    { return GE; }
+"=="                    { return EQ; }
+"!="                    { return NE; }
 inf                     { return INF; }
 fun                     { return FUN; }
 if                      { return IF; }

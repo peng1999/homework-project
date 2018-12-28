@@ -13,10 +13,6 @@ using std::unique_ptr;
 using std::string;
 using std::vector;
 
-enum class op_type {
-    PLUS, MINUS, MUL, DIV, ABS, UMINUS,
-};
-
 class ast_node;
 
 struct fun_body {
@@ -45,24 +41,6 @@ public:
     virtual object eval(env_scope &env) = 0;
 
     virtual ~ast_node() = default;
-};
-
-class op_node : public ast_node {
-public:
-    op_type type;
-
-    vector<unique_ptr<ast_node>> args;
-
-    object eval(env_scope &env) override;
-
-    ~op_node() override = default;
-
-    op_node(op_type t, ast_node *_l, ast_node *_r) : type(t) {
-        args.emplace_back(_l);
-        args.emplace_back(_r);
-    }
-
-    op_node(op_type t, ast_node *a) : type(t) { args.emplace_back(a); }
 };
 
 class num_node : public ast_node {
@@ -104,6 +82,15 @@ public:
         for (auto arg: v) {
             params.emplace_back(arg);
         }
+    }
+
+    fun_call_node(const string &n, ast_node *lhs, ast_node *rhs) : name(n) {
+        params.emplace_back(lhs);
+        params.emplace_back(rhs);
+    }
+
+    fun_call_node(const string &n, ast_node *a) : name(n) {
+        params.emplace_back(a);
     }
 
     object eval(env_scope &env) override;
