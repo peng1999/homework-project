@@ -78,20 +78,11 @@ public:
     symbol name;
     ast_node_list params;
 
-    fun_call_node(const string &n, vector<ast_node *> v) : name(n) {
-        for (auto arg: v) {
-            params.emplace_back(arg);
-        }
-    }
+    fun_call_node(const string &n, vector<ast_node *> v);
 
-    fun_call_node(const string &n, ast_node *lhs, ast_node *rhs) : name(n) {
-        params.emplace_back(lhs);
-        params.emplace_back(rhs);
-    }
+    fun_call_node(const string &n, ast_node *lhs, ast_node *rhs);
 
-    fun_call_node(const string &n, ast_node *a) : name(n) {
-        params.emplace_back(a);
-    }
+    fun_call_node(const string &n, ast_node *a);
 
     object eval(env_scope &env) override;
 
@@ -111,8 +102,7 @@ public:
     sym_list params;
     unique_ptr<ast_node> body;
 
-    fun_def_node(const string &name, sym_list params, ast_node *body)
-            : name(name), params(std::move(params)), body(body) {}
+    fun_def_node(const string &name, sym_list params, ast_node *body);
 
     object eval(env_scope &env) override;
 };
@@ -121,11 +111,7 @@ class block_node : public ast_node {
 public:
     vector<unique_ptr<ast_node>> sentences;
 
-    explicit block_node(vector<ast_node *> insts) {
-        for (auto p: insts) {
-            sentences.emplace_back(p);
-        }
-    }
+    explicit block_node(vector<ast_node *> insts);
 
     object eval(env_scope &env) override;
 };
@@ -136,13 +122,9 @@ public:
     unique_ptr<block_node> if_block;
     unique_ptr<block_node> else_block;
 
-    if_node(ast_node *cond, std::vector<ast_node *> if_b)
-            : cond(cond), if_block(new block_node(std::move(if_b))), else_block() {}
+    if_node(ast_node *cond, std::vector<ast_node *> if_b);
 
-    if_node(ast_node *cond, std::vector<ast_node *> if_b, std::vector<ast_node *> else_b)
-            : cond(cond),
-              if_block(new block_node(std::move(if_b))),
-              else_block(new block_node(std::move(else_b))) {}
+    if_node(ast_node *cond, std::vector<ast_node *> if_b, std::vector<ast_node *> else_b);
 
     object eval(env_scope &env) override;
 };

@@ -112,10 +112,28 @@ object fun_call_node::eval(env_scope &env) {
     return object::operate(fun, args);
 }
 
+fun_call_node::fun_call_node(const string &n, ast_node *lhs, ast_node *rhs) : name(n) {
+    params.emplace_back(lhs);
+    params.emplace_back(rhs);
+}
+
+fun_call_node::fun_call_node(const string &n, ast_node *a) : name(n) {
+    params.emplace_back(a);
+}
+
+fun_call_node::fun_call_node(const string &n, vector<ast_node *> v) : name(n) {
+    for (auto arg: v) {
+        params.emplace_back(arg);
+    }
+}
+
 object fun_def_node::eval(env_scope &env) {
     env.funcs.insert_or_assign(name, fun_body{params, std::move(body)});
     return object::make_def_msg(name.get_string());
 }
+
+fun_def_node::fun_def_node(const string &name, sym_list params, ast_node *body)
+        : name(name), params(std::move(params)), body(body) {}
 
 object block_node::eval(env_scope &env) {
     object a = object::make_void();
@@ -123,6 +141,12 @@ object block_node::eval(env_scope &env) {
         a = in->eval(env);
     }
     return a;
+}
+
+block_node::block_node(vector<ast_node *> insts) {
+    for (auto p: insts) {
+        sentences.emplace_back(p);
+    }
 }
 
 object if_node::eval(env_scope &env) {
@@ -136,6 +160,14 @@ object if_node::eval(env_scope &env) {
         return if_block->eval(env);
     }
 }
+
+if_node::if_node(ast_node *cond, std::vector<ast_node *> if_b)
+        : cond(cond), if_block(new block_node(std::move(if_b))), else_block() {}
+
+if_node::if_node(ast_node *cond, std::vector<ast_node *> if_b, std::vector<ast_node *> else_b)
+        : cond(cond),
+          if_block(new block_node(std::move(if_b))),
+          else_block(new block_node(std::move(else_b))) {}
 
 while_node::while_node(ast_node *cond, vector<ast_node *> block)
         : cond(cond), block(new block_node(std::move(block))) {}
