@@ -42,9 +42,7 @@ extern int yylex();
 %%
 calclist:
         | calclist exp EOL      { auto result = $2->eval(env);
-                                  if (result.is_num())
-                                      std::cout << "= ";
-                                  std::cout << result << std::endl;
+                                  show_value(result);
                                   delete $2;
                                   prompt();
                                 }
