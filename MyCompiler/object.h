@@ -13,7 +13,7 @@ using std::vector;
 class message_obj {
 public:
     enum m_type {
-        VOID, DEFINED, ERROR
+        VOID, RAW, DEFINED, ERROR
     } type;
     std::string msg;
 
@@ -40,6 +40,8 @@ public:
     static object make_err(const std::string &m);
 
     static object make_def_msg(const std::string &m);
+
+    static object make_raw_str(const std::string &m);
 
     static object make_num(double v);
 

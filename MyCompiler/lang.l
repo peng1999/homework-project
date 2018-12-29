@@ -35,6 +35,9 @@ while                   { return WHILE; }
                           return IDENT;
                         }
 [0-9]+"."?[0-9]*{EXP}?  { yylval.d = atof(yytext); return NUMBER; }
+\"[^"]*\"               { yylval.id = new std::string(yytext + 1, yyleng - 2);
+                          return STR;
+                        }
 \n                      { return EOL; }
 "//".*                  { }
 [ \t]                   { }

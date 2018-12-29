@@ -22,7 +22,7 @@ extern int yylex();
 
 %token <d> NUMBER
 %token EOL
-%token <id> IDENT
+%token <id> IDENT STR
 /* keywords */
 %token INF FUN IF ELSE WHILE
 %token LE GE EQ NE
@@ -90,6 +90,7 @@ exp: IDENT '=' exp              { $$ = new assign_node(*$1, $3); }
    | NUMBER                     { $$ = new num_node($1); }
    | INF                        { $$ = new num_node(std::numeric_limits<double>::infinity()); }
    | IDENT                      { $$ = new var_node(*$1); }
+   | STR                        { $$ = new string_node(*$1); }
    ;
 
 exp_list:                       { $$ = new vector<ast_node*> {}; }

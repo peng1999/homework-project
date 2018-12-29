@@ -138,3 +138,12 @@ public:
 
     object eval(env_scope &env) override;
 };
+
+class string_node : public ast_node {
+public:
+    string raw;
+
+    explicit string_node(string str) : raw(std::move(str)) {}
+
+    object eval(env_scope &env) override;
+};

@@ -80,6 +80,14 @@ fun_call_node::fun_pool_t& fun_call_node::predefined_fun() {
 };
 
 object fun_call_node::eval(env_scope &env) {
+    if (name == symbol("print")) {
+        for (auto &a : params) {
+            std::cout << a->eval(env) << " ";
+        }
+        std::cout << std::endl;
+        return object::make_void();
+    }
+
     // Find predefined finction first
     auto funp = predefined_fun().find(name);
     if (funp == predefined_fun().end()) {
@@ -177,4 +185,8 @@ object while_node::eval(env_scope &env) {
         block->eval(env);
     }
     return object::make_void();
+}
+
+object string_node::eval(env_scope &env) {
+    return object::make_raw_str(raw);
 }

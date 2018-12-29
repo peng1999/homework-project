@@ -43,6 +43,10 @@ object object::make_def_msg(const std::string &m) {
     return object(message_obj(m, message_obj::DEFINED));
 }
 
+object object::make_raw_str(const std::string &m) {
+    return object(message_obj(m, message_obj::RAW));
+}
+
 std::ostream &operator<<(std::ostream &out, object o) {
     std::visit([&](auto &&obj) { out << obj; },
                o.val);
@@ -53,6 +57,8 @@ std::ostream &operator<<(std::ostream &out, message_obj o) {
     switch (o.type) {
         case message_obj::VOID:
             return out << "void";
+        case message_obj::RAW:
+            return out << o.msg;
         case message_obj::ERROR:
             return out << "error: " << o.msg;
         case message_obj::DEFINED:
