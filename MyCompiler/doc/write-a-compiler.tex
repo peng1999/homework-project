@@ -1,0 +1,139 @@
+% Created 2019-01-02 三 17:51
+% Intended LaTeX compiler: pdflatex
+\documentclass[UTF8]{ctexart}
+\usepackage{svg}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\author{彭冠文}
+\date{\today}
+\title{一个脚本语言解释器}
+\hypersetup{
+ hidelinks=true,
+ pdfauthor={Peng Guanwen},
+ pdftitle={一个脚本语言解释器},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 26.1 (Org mode 9.1.9)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+这是NPU王岐老师的程序设计课程的自选大作业题目。
+
+\section{语言描述}
+\label{sec:org7ac6f48}
+
+\subsection{表达式}
+\label{sec:org295ddb2}
+支持赋值，四则运算，绝对值，函数调用等。内建常用的数学函数如 \texttt{sin} \texttt{cos} \texttt{tan} 等。
+语法：
+\begin{verbatim}
+exp: IDENT '=' exp         
+   | IDENT '(' exp_list ')'
+   | exp '+' exp           
+   | exp '-' exp           
+   | exp '*' exp           
+   | exp '/' exp           
+   | '|' exp '|'           
+   | '(' exp ')'           
+   | '-' exp
+   | NUMBER                
+   | "inf"
+   | IDENT                 
+\end{verbatim}
+例子：
+\begin{verbatim}
+1 + sin(2) * ||-3 / 4| * 5|
+\end{verbatim}
+
+\texttt{print} 函数可以打印值
+\begin{verbatim}
+a = 1
+b = 2
+print("a + b =", a + b)
+\end{verbatim}
+
+\subsection{变量}
+\label{sec:org9149477}
+变量无需声明，直接赋值就行了。
+\begin{verbatim}
+a = 1
+\end{verbatim}
+
+\subsection{自定义函数}
+\label{sec:org31eea38}
+自定义函数的例子如下。注意等号后面必须跟 \textbf{一个} 表达式。
+\begin{verbatim}
+def add(a, b) = a + b
+def sqr(x) = x^2
+\end{verbatim}
+
+\subsection{代码块}
+\label{sec:orgbd4e733}
+代码块用大括号包围，以回车或分号分隔表达式。代码块的值是最后一个表达式的值。
+\begin{verbatim}
+{ a = 1; a }
+{ a = 1
+  b = 2
+  a + b
+}
+\end{verbatim}
+
+\subsection{分支和循环}
+\label{sec:orgb6267ee}
+分别用 \texttt{if} 和 \texttt{while} 语句。注意 \texttt{if} 语句会返回值。在下面的例子中， \texttt{b} 等于 0。
+\begin{verbatim}
+a = 1
+b = if a < 0 { 1 } else { 0 }
+sum = 0
+while a < 100 {
+    sum = sum + a
+    a = a + 1
+}
+\end{verbatim}
+
+\section{实现架构}
+\label{sec:org0cb82d6}
+
+由于是C/C++程序设计课，只能使用C++编写。于是我选择了生成C/C++代码的Flex/Bison。
+Flex 是词法分析器，用于生成 Token，交给 Bison 具体处理生成抽象语法树（AST）。
+AST 由 C++ 在 \texttt{ast.h} 中定义。有一个 \texttt{ast\_node} 抽象基类。由它派生出了所有语法
+结构类。 \texttt{ast\_node} 有一个 \texttt{eval(env\_scope)} 虚函数，用于求值。求值的结果用
+\texttt{object} 类表示。
+
+\section{代码行数}
+\label{sec:org5252de5}
+
+计空白行：731
+
+不计空白：577
+
+\section{使用到的技术}
+\label{sec:org0c661ba}
+
+\begin{itemize}
+\item Flex/Bison 词法/语法分析器
+\item C++ 11 特性 （包括 \texttt{unqiue\_ptr} ，自动类型推断，Lambda 表达式，移动语义，基于范围的 for 循环）
+\item C++ 14 特性 （包括泛型 Lambda 表达式）
+\item C++ 17 特性 （包括 \texttt{variant} 类，结构化绑定）
+\item 面向对象编程，类继承与虚方法
+\item 多文件编译与链接
+\item 编译系统 CMake 与 GNU Make
+\end{itemize}
+
+下面是源代码的依赖关系图
+ \begin{center}
+\includesvg[width=.9\linewidth]{graph}
+\end{center} 
+\end{document}
