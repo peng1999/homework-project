@@ -158,7 +158,7 @@ block_node::block_node(vector<ast_node *> insts) {
 }
 
 object if_node::eval(env_scope &env) {
-    if (cond->eval(env) == object(0)) {
+    if (cond->eval(env) == object(0.)) {
         if (else_block) {
             return else_block->eval(env);
         } else {
@@ -181,7 +181,7 @@ while_node::while_node(ast_node *cond, vector<ast_node *> block)
         : cond(cond), block(new block_node(std::move(block))) {}
 
 object while_node::eval(env_scope &env) {
-    while (cond->eval(env) != object(0)) {
+    while (cond->eval(env) != object(0.)) {
         block->eval(env);
     }
     return object::make_void();
