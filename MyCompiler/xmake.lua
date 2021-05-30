@@ -1,0 +1,5 @@
+target("lang")
+    set_kind("binary")
+    add_includedirs(".")
+    add_rules("lex", "yacc")
+    add_files("*.ll", "*.yy", "*.cpp")

@@ -7,8 +7,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 find_package(BISON)
 find_package(FLEX)
 
-bison_target(Parser lang.ypp ${CMAKE_CURRENT_BINARY_DIR}/lang.tab.cpp)
-flex_target(Scanner lang.l ${CMAKE_CURRENT_BINARY_DIR}/lang.yy.cpp)
+bison_target(Parser lang.yy ${CMAKE_CURRENT_BINARY_DIR}/lang.tab.cpp)
+flex_target(Scanner lang.ll ${CMAKE_CURRENT_BINARY_DIR}/lang.yy.cpp)
 add_flex_bison_dependency(Scanner Parser)
 
 add_executable(lang
